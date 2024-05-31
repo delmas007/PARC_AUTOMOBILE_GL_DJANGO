@@ -68,13 +68,16 @@ def accueil_data(request):
 
     vehicules_proches_vidange = {}
 
-    for vehiculee in vehicules_proches_vidanges:
-        if vehiculee:
-            vehicules_proches_vidange[vehiculee] = {'photo': None}
+    for vehicule in vehicules_proches_vidanges:
+        if vehicule:
+            if vehicule.kilometrage <= vehicule.videnge:
+                vehicules_proches_vidange[vehicule] = {'vidange': True, 'photo': None}
+            else:
+                vehicules_proches_vidange[vehicule] = {'update_required': True, 'photo': None}
         try:
-            photo_vehicule = Photo.objects.filter(vehicule=vehiculee).first()
+            photo_vehicule = Photo.objects.filter(vehicule=vehicule).first()
             if photo_vehicule:
-                vehicules_proches_vidange[vehiculee]['photo'] = photo_vehicule
+                vehicules_proches_vidange[vehicule]['photo'] = photo_vehicule
         except ObjectDoesNotExist:
             pass
 
